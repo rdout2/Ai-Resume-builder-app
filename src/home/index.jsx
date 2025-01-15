@@ -1,8 +1,12 @@
 import React from 'react'
+import { UserButton } from '@clerk/clerk-react'
 
 function Home() {
   return (
-    <div>Home</div>
+    <div>
+      
+      <p>Home   <UserButton /> </p>
+    </div>
   )
 }
 
