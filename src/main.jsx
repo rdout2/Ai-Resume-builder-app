@@ -1,12 +1,12 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SingInPage from "./auth/sing-in/index.jsx";
 import Dashboard from "./dashboard/index.jsx";
 import Home from "./home/index.jsx"; 
 import { ClerkProvider } from '@clerk/clerk-react'
 import App from "./App.jsx";
+import "./index.css";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
