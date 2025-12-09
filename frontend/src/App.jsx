@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import Header from './components/ui/custom/header';
 
 function App() {
-  const [count, setCount] = useState(0);
-  const { user, isLoaded, isSignedin } = useUser();
+  const { isLoaded, isSignedIn } = useUser();
 
-  if (isSignedin && isLoaded) {
-    return <Navigate to={"/auth/sign-in"} />;
+  // Show loading state while Clerk loads
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-lg">Loading...</div>
+      </div>
+    );
   }
 
   return (
-    <>   
-      <Header /> {/* Utilisation du composant Header */}
+    <div className="min-h-screen bg-background">
+      <Header />
       <Outlet />
-    </>
+    </div>
   );
 }
 

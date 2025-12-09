@@ -1,17 +1,18 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import SingInPage from "./auth/sing-in/index.jsx";
-import Dashboard from "./dashboard/index.jsx";
-import Home from "./home/index.jsx"; 
-import { ClerkProvider } from '@clerk/clerk-react'
+import { ClerkProvider } from "@clerk/clerk-react";
 import App from "./App.jsx";
+import Home from "./home/index.jsx";
+import Dashboard from "./dashboard/index.jsx";
+import SignInPage from "./auth/sign-in/index.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import "./index.css";
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key")
+  throw new Error("Missing Clerk Publishable Key - Add VITE_CLERK_PUBLISHABLE_KEY to your .env file");
 }
 
 const router = createBrowserRouter([
@@ -19,28 +20,42 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-     
       {
-        path: "/dashboard",
-        element: <Dashboard />,
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "dashboard",
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "dashboard/resume/:resumeId/edit",
+        element: (
+          <ProtectedRoute>
+            <div className="p-10">Resume Editor - Coming Soon</div>
+          </ProtectedRoute>
+        ),
       },
     ],
   },
   {
-    path: "/home", 
-    element: <Home />, 
-  },
-  {
     path: "/auth/sign-in",
-    element: <SingInPage />,
+    element: <SignInPage />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-    <RouterProvider router={router} />
+    <ClerkProvider 
+      publishableKey={PUBLISHABLE_KEY} 
+      afterSignOutUrl="/"
+      signInUrl="/auth/sign-in"
+    >
+      <RouterProvider router={router} />
     </ClerkProvider>
   </StrictMode>
 );
-
